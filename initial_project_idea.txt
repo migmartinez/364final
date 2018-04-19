@@ -1,0 +1,4 @@
+MIGUEL MARTINEZ
+SI 364 FINAL PROJECT PLAN - HW6
+
+This application, ideally, would allow users to register and sign in (create account, that account will be stored in a database), and save video games that they desire to play to their account. Users can make wishlists of games and see their own lists.
