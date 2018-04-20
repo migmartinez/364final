@@ -19,7 +19,7 @@ app = Flask(__name__)
 app.debug = True
 app.use_reloader = True
 app.config['SECRET_KEY'] = 'hard to guess string from si364'
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:lolcat123@localhost/migmart"
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:lolcat123@localhost/migmartFinal"
 app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -52,16 +52,55 @@ class Lists(db.Model):
     name = db.Column(db.String(225))
     rating = db.Column(db.Integer)
 
-## FORMS - BLANK NOW
+## FORMS 
 
-## HELPER FUNCTIONS - BLANK NOW
+class GameListForm(FlaskForm):
+    name = StringField("Enter the name of the game list: ", validators=[Required()])
+    games = TextAreaField("Enter the games in the following format: name, priority rating -- separated by newlines")
+    submit = SubmitField("Submit")
+
+class GameForm(FlaskForm):
+    name = StringField("Enter the name of the game: ",validators=[Required()])
+    submit = SubmitField("Submit")
+
+class UpdateForm(FLaskForm):
+    submit = SubmitField("Update")
+
+class UpdatePriorityForm(FlaskForm):
+    updatePriority = StringField("Enter the new priority rating of the game: ",validators=[Required()])
+    submit = SubmitField("Update")
+
+class DeleteButtonForm(FlaskForm):
+    submit = SubmitField("Delete")
+
+
+
+
+## HELPER FUNCTIONS
+
+def get_or_create_game(game):
+    elements = [x.strip().rstrip() for x in game.split(",")]
+    g = Games.query.filter_by(name=elements[0]).first()
+    if g:
+        return g
+    else:
+        g = Games.query.filter_by(name=elements[0],rating=elements[-1])
+        db.session.add(g)
+        db.session.commit()
+        return g
+
+#def get_or_create_list(title)
 
 ## VIEW FUNCTIONS
 
 # Should render basic index/home page for user and render form for entering in game data utilizing IGDB's API. Then save the form data to a database using a get_or_create method. When the form is submitted, should redirect to the same page but with an alert notifying the user that the game has been saved to their wish list.
 @app.route('/', methods=["GET","POST"])
 def index():
-    pass
+    form = GameForm()
+    if request.method == "POST":
+        title = form.name.data
+        new_game = get_or_create_game(title)
+    return render_template('base.html',form=form)
 
 # Should render page with all game lists contained on it. User should be able to select, rank, edit, delete, and view the lists
 @app.route('/games',methods=["GET","POST"])

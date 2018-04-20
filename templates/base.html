@@ -1,0 +1,14 @@
+<h1>Home</h1>
+{% block nav %}
+    <p>Home</p><br>
+{% endblock %}
+
+{% block content %}
+
+<form action="" method="POST">
+    {{ form.hidden_tag() }}
+    {{ form.name.label }} {{ form.name() }}<br>
+    {{ form.submit() }}<br>
+</form>
+
+{% endblock %}
