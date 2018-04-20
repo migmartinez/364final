@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block nav %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+<h1>Profile</h1>
+<h2>{{current_user.username}}</h2>
+<form action="" method="POST">
+    {{ form.hidden_tag() }}
+    {{ form.descript.label }} {{ form.descript() }}<br>
+    {{ form.favgame.label }} {{ form.favgame() }}<br>
+    {{ form.nametag.label }} {{ form.nametag() }}<br>
+    {{ form.submit() }}<br>
+</form>
+{% endblock %}

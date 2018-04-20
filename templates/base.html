@@ -1,6 +1,20 @@
 <h1>Home</h1>
+{% if current_user.is_authenticated %}
+    <a href="{{ url_for('logout') }}">Sign Out {{current_user.username}}</a>
+{% else %}
+    <a href="{{ url_for('login') }}">Sign In</a>
+{% endif %}
+
+{% if current_user.is_authenticated %}
+	<a href="{{ url_for('profile') }}">My Profile</a>
+	<a href="{{ url_for('clutch') }}">Member Feature: Clutch Nixon</a>
+{% endif %}
+<br>
+<br>
 {% block nav %}
-    <p>Home</p><br>
+    <a href="{{ url_for('index') }}">Home</a><br>
+    <a href="{{ url_for('games') }}"> All Games</a><br>
+    <a href="{{ url_for('igdb') }}">IGDB Database</a>
 {% endblock %}
 
 {% block content %}
