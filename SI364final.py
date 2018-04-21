@@ -50,7 +50,7 @@ games_list = db.Table('games_list',db.Column('list_id',db.Integer, db.ForeignKey
 
 profiles_list = db.Table('profiles_list',db.Column('profile_id',db.Integer, db.ForeignKey('profiles.id')),db.Column('user_id',db.Integer, db.ForeignKey('users.id')))
 
-#profiles_list = db.Table('profiles_list',db.Column(''))
+
 class Games(db.Model):
     __tablename__ = "games"
     id = db.Column(db.Integer, primary_key=True)
@@ -80,8 +80,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(255), unique=True, index=True)
     email = db.Column(db.String(64), unique=True, index=True)
     password_hash = db.Column(db.String(128))
-    # DONE: In order to complete a relationship with a table that is detailed below (a one-to-many relationship for users and gif collections), you'll need to add a field to this User model. (Check out the TODOs for models below for more!)
-    # Remember, the best way to do so is to add the field, save your code, and then create and run a migration!
+
     profile = db.relationship('Profile', secondary=profiles_list, backref=db.backref('users',lazy='dynamic'),lazy='dynamic')
 
 
@@ -96,8 +95,7 @@ class User(UserMixin, db.Model):
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-## DB load function
-## Necessary for behind the scenes login manager that comes with flask_login capabilities! Won't run without this.
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id)) # returns User object or None
@@ -164,30 +162,12 @@ def get_games(game_inp):
     return info
 
 def get_or_create_game(game):
-    #elements = [x.strip().rstrip() for x in game.split(",")]
     g = Games.query.filter_by(name=game).first()
     if not g:
         g = Games(name=game)
     db.session.add(g)
     db.session.commit()
     return g
-   # if g:
-   #     return g
-  #  else:
-   #     g = Games.query.filter_by(name=game)
-   #     db.session.add(g)
-    #    db.session.commit()
-    #    return g
-
-#def get_or_create_list(title, game_strings=[]):
- #   l = Lists.query.filter_by(title=name).first()
- #   if not l:
- #       l = Lists(title=title)
- #   for name in game_strings:
-#        l.listlist.append(name)
- #   db.session.add(l)
-#    db.session.commit()
-#    return l
 
 def get_or_create_item(item_string):
     elements = [x.strip().rstrip() for x in item_string.split(",")]
@@ -206,7 +186,6 @@ def get_or_create_list(name, game_strings=[]):
         l = Lists(name=name, listlist=game_strings)
     for s in game_strings:
         item = get_or_create_item(s)
-       # l.listlist.append(item)
     db.session.add(l)
     db.session.commit()
     return l
@@ -215,7 +194,7 @@ def get_or_create_list(name, game_strings=[]):
 
 ## VIEW FUNCTIONS
 
-# Should render basic index/home page for user and render form for entering in game data utilizing IGDB's API. Then save the form data to a database using a get_or_create method. When the form is submitted, should redirect to the same page but with an alert notifying the user that the game has been saved to their wish list.
+# Should render basic index/home page for user and render form for entering in game data utilizing IGDB's API. Then save the form data to a database using a get_or_create method. 
 @app.route('/', methods=["GET","POST"])
 def index():
     form = GameForm()
@@ -227,7 +206,7 @@ def index():
         return render_template('games.html', info=gamess)
     return render_template('base.html',form=form)
 
-# Should render page with all game lists contained on it. User should be able to select, rank, edit, delete, and view the lists
+# Should render page with all game contained on it.
 @app.route('/games',methods=["GET","POST"])
 def games():
     form = DeleteButtonForm()
@@ -286,15 +265,6 @@ def myprof():
     prof_info = Profile.query.all()
     return render_template('myprofile.html', info=prof_info)
 
-
-
-#@app.route('/list/<ident>',methods=["GET","POST"])
-#def one_list(ident):
- #   form = UpdateButtonForm()
-  #  lst = Lists.query.filter_by(id=ident).first()
-   # items = lst.items.all()
-    #return render_template('list_tpl.html',todolist=lst,items=items,form=form)
-
 @app.route('/delete/<game>',methods=["GET"])
 def delete():
     db.session.delete(Games.query.filter_by(name=game).first())
@@ -311,7 +281,6 @@ def page_not_found(e):
 @app.errorhandler(500)
 def internal_server_error(e):
     return render_template('500.html'), 500
-
 
 
 

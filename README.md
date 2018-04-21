@@ -57,7 +57,7 @@
 
  Successfully save data to each table.
 
- Successfully query data from each of your models (so query at least one column, or all data, from every database table you have a model for) and use it to effect in the application (e.g. won't count if you make a query that has no effect on what you see, what is saved, or anything that happens in the app).
+ X	Successfully query data from each of your models (so query at least one column, or all data, from every database table you have a model for) and use it to effect in the application (e.g. won't count if you make a query that has no effect on what you see, what is saved, or anything that happens in the app).
 
  X	At least one query of data using an .all() method and send the results of that query to a template.
 
@@ -78,23 +78,23 @@
 
  X	Your application should use data from a REST API or other source such that the application processes the data in some way and saves some information that came from the source to the database (in some way).
  
- At least one WTForm that sends data with a GET request to a new page.
+ X	At least one WTForm that sends data with a GET request to a new page.
 
-X At least one WTForm that sends data with a POST request to the same page. (NOT counting the login or registration forms provided for you in class.)
+ X	At least one WTForm that sends data with a POST request to the same page. (NOT counting the login or registration forms provided for you in class.)
 
- At least one WTForm that sends data with a POST request to a new page. (NOT counting the login or registration forms provided for you in class.)
+ X	At least one WTForm that sends data with a POST request to a new page. (NOT counting the login or registration forms provided for you in class.)
 
  At least two custom validators for a field in a WTForm, NOT counting the custom validators included in the log in/auth code.
 
- Include at least one way to update items saved in the database in the application (like in HW5).
+ X	Include at least one way to update items saved in the database in the application (like in HW5).
 
  Include at least one way to delete items saved in the database in the application (also like in HW5).
 
- Include at least one use of redirect.
+ X	Include at least one use of redirect.
 
-X Include at least two uses of url_for. (HINT: Likely you'll need to use this several times, really.)
+ X	Include at least two uses of url_for. (HINT: Likely you'll need to use this several times, really.)
 
-X Have at least 5 view functions that are not included with the code we have provided. (But you may have more! Make sure you include ALL view functions in the app in the documentation and navigation as instructed above.)
+ X	Have at least 5 view functions that are not included with the code we have provided. (But you may have more! Make sure you include ALL view functions in the app in the documentation and navigation as instructed above.)
 
 ## Additional Requirements for additional points -- an app with extra functionality!
 	Note: Maximum possible % is 102%.
