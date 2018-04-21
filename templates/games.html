@@ -5,6 +5,22 @@
 {% endblock %}
 
 {% block content %}
-<h1>Games</h1>
-{{ info }}
+<h1>Games: </h1>
+
+<ul>
+{% for game in info %}
+	<li>{{ game }}</li>
+{% endfor %}
+</ul>
+
+{% if gg %}
+	{% for game in gg %}
+		{{ game.name }}<br>
+		<form method="GET" action="/delete/{{ game }}">
+        	{{ form.hidden_tag() }}
+        	{{ form.submit() }}
+        </form>
+	{% endfor %}
+{% endif %}
+
 {% endblock %}

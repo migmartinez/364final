@@ -17,7 +17,6 @@ def get_games_name(game_inp):
 	r = []
 	for game in result.body:
 		r.append(game["name"])
-		#print(game["name"])
 	return r
 
 def get_games_all():

@@ -61,7 +61,7 @@ class Lists(db.Model):
     __tablename__ = "lists"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(225))
-    rating = db.Column(db.Integer)
+    listlist = db.Column(db.String(500))
 
 class Profile(db.Model):
     __tablename__ = "profiles"
@@ -82,7 +82,7 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     # DONE: In order to complete a relationship with a table that is detailed below (a one-to-many relationship for users and gif collections), you'll need to add a field to this User model. (Check out the TODOs for models below for more!)
     # Remember, the best way to do so is to add the field, save your code, and then create and run a migration!
-    #profile = db.relationship('profiles', secondary=profiles_list, backref=db.backref('users',lazy='dynamic'),lazy='dynamic')
+    profile = db.relationship('Profile', secondary=profiles_list, backref=db.backref('users',lazy='dynamic'),lazy='dynamic')
 
 
     @property
@@ -158,17 +158,10 @@ class ProfileForm(FlaskForm):
 def get_games(game_inp):
     from practice_api import get_games_name
     info = get_games_name(game_inp)
+    rat = Lists(name = "", listlist=info)
+    db.session.add(rat)
+    db.session.commit()
     return info
-#def get_games_name():
-    #game_inp = input("Input a game to add to your list: ")
-   # form = GameForm()
-   # game_inp = form.name.data
-   # result = igdb.games({
-   #     'search': game_inp,
-   #     'fields': 'name'
-    #    })
-   # for game in result.body:
-  #      print(game["name"])
 
 def get_or_create_game(game):
     #elements = [x.strip().rstrip() for x in game.split(",")]
@@ -186,7 +179,39 @@ def get_or_create_game(game):
     #    db.session.commit()
     #    return g
 
-#def get_or_create_list(title)
+#def get_or_create_list(title, game_strings=[]):
+ #   l = Lists.query.filter_by(title=name).first()
+ #   if not l:
+ #       l = Lists(title=title)
+ #   for name in game_strings:
+#        l.listlist.append(name)
+ #   db.session.add(l)
+#    db.session.commit()
+#    return l
+
+def get_or_create_item(item_string):
+    elements = [x.strip().rstrip() for x in item_string.split(",")]
+    item = Games.query.filter_by(name=elements[0]).first()
+    if item:
+        return item
+    else:
+        item = Games(name=elements[0])
+        db.session.add(item)
+        db.session.commit()
+        return item
+
+def get_or_create_list(name, game_strings=[]):
+    l = Lists.query.filter_by(name=name).first()
+    if not l:
+        l = Lists(name=name, listlist=game_strings)
+    for s in game_strings:
+        item = get_or_create_item(s)
+       # l.listlist.append(item)
+    db.session.add(l)
+    db.session.commit()
+    return l
+        
+
 
 ## VIEW FUNCTIONS
 
@@ -198,16 +223,17 @@ def index():
         name = form.name.data
         new_game = get_or_create_game(name)
         gamess = get_games(game_inp=name)
-        #return redirect(url_for('games'))
+        new_list = get_or_create_list(name, gamess)
         return render_template('games.html', info=gamess)
     return render_template('base.html',form=form)
 
 # Should render page with all game lists contained on it. User should be able to select, rank, edit, delete, and view the lists
 @app.route('/games',methods=["GET","POST"])
 def games():
-    #form = DeleteButtonForm()
-   # lsts = Lists.query.all()
-    return render_template('games.html')
+    form = DeleteButtonForm()
+    lsts = Lists.query.all()
+    input_games = Games.query.all()
+    return render_template('games.html', gamez_list=lsts ,form=form, gg=input_games)
 
 ## LOGIN ROUTES
 @app.route('/login',methods=["GET","POST"])
@@ -248,16 +274,33 @@ def clutch():
 @login_required
 def profile():
     form = ProfileForm()
-    if form.validate_on_submit():
-        profile = Profile(descript=form.descript.data,favgame=form.favgame.data,nametag=form.nametag.data)
-        db.session.add(profile)
-        db.session.commit()
-        return redirect(url_for('profile'))
+    profile = Profile(descript=form.descript.data,favgame=form.favgame.data,nametag=form.nametag.data)
+    db.session.add(profile)
+    db.session.commit()
+        #return redirect(url_for('profile'))
     return render_template('profile.html',form=form)
 
-@app.route('/igdb')
-def igdb():
-    return render_template('igdb.html')
+@app.route('/myprofile')
+@login_required
+def myprof():
+    prof_info = Profile.query.all()
+    return render_template('myprofile.html', info=prof_info)
+
+
+
+#@app.route('/list/<ident>',methods=["GET","POST"])
+#def one_list(ident):
+ #   form = UpdateButtonForm()
+  #  lst = Lists.query.filter_by(id=ident).first()
+   # items = lst.items.all()
+    #return render_template('list_tpl.html',todolist=lst,items=items,form=form)
+
+@app.route('/delete/<game>',methods=["GET"])
+def delete():
+    db.session.delete(Games.query.filter_by(name=game).first())
+    flash("Deleted game {}".format(game))
+    return redirect(url_for("games"))
+
 
 ## ERROR HANDLING ROUTES
 @app.errorhandler(404)
