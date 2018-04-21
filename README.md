@@ -18,7 +18,7 @@
 	'/register' = 'register.html'
 	'/clutch' = 'clutchnixon.html'
 	'/profile' = 'profile.html'
-	'/igdb' = 'igdb.html'
+	'/myprofile' = 'myprofile.html'
 	'/delete/lst' = deletes a game and returns'games.html'
 
 ## Documentation README Requirements
@@ -55,7 +55,7 @@
 
  X	At least one many:many relationship that works properly built between 2 models.
 
- Successfully save data to each table.
+ X	Successfully save data to each table.
 
  X	Successfully query data from each of your models (so query at least one column, or all data, from every database table you have a model for) and use it to effect in the application (e.g. won't count if you make a query that has no effect on what you see, what is saved, or anything that happens in the app).
 
@@ -84,11 +84,11 @@
 
  X	At least one WTForm that sends data with a POST request to a new page. (NOT counting the login or registration forms provided for you in class.)
 
- At least two custom validators for a field in a WTForm, NOT counting the custom validators included in the log in/auth code.
+ X At least two custom validators for a field in a WTForm, NOT counting the custom validators included in the log in/auth code.
 
  X	Include at least one way to update items saved in the database in the application (like in HW5).
 
- Include at least one way to delete items saved in the database in the application (also like in HW5).
+ X	Include at least one way to delete items saved in the database in the application (also like in HW5).
 
  X	Include at least one use of redirect.
 
@@ -96,7 +96,7 @@
 
  X	Have at least 5 view functions that are not included with the code we have provided. (But you may have more! Make sure you include ALL view functions in the app in the documentation and navigation as instructed above.)
 
-## Additional Requirements for additional points -- an app with extra functionality!
+## Additional Requirements for additional points -- an app with extra functionality! - NONE DONE -
 	Note: Maximum possible % is 102%.
 
  (100 points) Include a use of an AJAX request in your application that accesses and displays useful (for use of your application) data.

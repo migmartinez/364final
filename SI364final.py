@@ -107,9 +107,15 @@ class GameListForm(FlaskForm):
     games = TextAreaField("Enter the games in the following format: name, priority rating -- separated by newlines")
     submit = SubmitField("Submit")
 
+
 class GameForm(FlaskForm):
-    name = StringField("Enter the name of the game: ",validators=[Required()])
+    name = StringField("Enter the name of the game: ",validators=[Required(), Regexp('^[A-Za-z][A-Za-z0-9_.]*$',0,'Games must have only letters, numbers, dots or underscores, no special characters')])
     submit = SubmitField("Submit")
+
+    def whitespace_check():
+        if name.data[0] == ' ':
+            raise ValidationError('Field cannot start with a space')
+
 
 class UpdateForm(FlaskForm):
     submit = SubmitField("Update")
@@ -153,6 +159,8 @@ class ProfileForm(FlaskForm):
 
 
 ## HELPER FUNCTIONS
+
+
 def get_games(game_inp):
     from practice_api import get_games_name
     info = get_games_name(game_inp)
@@ -256,7 +264,6 @@ def profile():
     profile = Profile(descript=form.descript.data,favgame=form.favgame.data,nametag=form.nametag.data)
     db.session.add(profile)
     db.session.commit()
-        #return redirect(url_for('profile'))
     return render_template('profile.html',form=form)
 
 @app.route('/myprofile')
@@ -265,8 +272,8 @@ def myprof():
     prof_info = Profile.query.all()
     return render_template('myprofile.html', info=prof_info)
 
-@app.route('/delete/<game>',methods=["GET"])
-def delete():
+@app.route('/delete/<game>',methods=["GET", "POST"])
+def delete(game):
     db.session.delete(Games.query.filter_by(name=game).first())
     flash("Deleted game {}".format(game))
     return redirect(url_for("games"))

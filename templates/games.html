@@ -15,11 +15,11 @@
 
 {% if gg %}
 	{% for game in gg %}
-		{{ game.name }}<br>
-		<form method="GET" action="/delete/{{ game }}">
+		{{ game.name }}
+		<form method="POST" action="/delete/{{ game.name }}">
         	{{ form.hidden_tag() }}
         	{{ form.submit() }}
-        </form>
+        </form><br>
 	{% endfor %}
 {% endif %}
 
